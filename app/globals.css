@@ -1,2 +1,23 @@
-body { margin: 0; font-family: Arial, sans-serif; background: #f8f9fa; }
+body { margin: 0; font-family: Inter, Arial, sans-serif; background: #f8fafc; color: #0f172a; }
 * { box-sizing: border-box; }
+.login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0f172a, #1e40af); padding: 20px; }
+.login-card { background: white; width: 100%; max-width: 440px; padding: 36px; border-radius: 20px; text-align: center; }
+.logo { font-weight: 800; font-size: 22px; }
+.login-card h1 { font-size: 28px; margin: 12px 0 8px; }
+.sub { color: #64748b; line-height: 1.5; }
+.login-card label, .container label { display: block; text-align: left; font-weight: 600; margin: 20px 0 8px; font-size: 14px; }
+.login-card input { width: 100%; padding: 14px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 15px; }
+.login-card button, .check-btn { width: 100%; margin-top: 14px; padding: 14px; background: #0f172a; color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; }
+.small { display: block; margin-top: 12px; color: #94a3b8; font-size: 12px; }
+.main header { background: white; padding: 16px 24px; display: flex; justify-content: space-between; border-bottom: 1px solid #e2e8f0; }
+.user { font-size: 13px; color: #64748b; } .user span { cursor: pointer; color: #2563eb; }
+.container { max-width: 760px; margin: 32px auto; padding: 0 20px 40px; }
+.container h1 { font-size: 32px; margin-bottom: 6px; }
+.purposes { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { padding: 9px 14px; border-radius: 999px; border: 1px solid #cbd5e1; background: white; cursor: pointer; }
+.pill.active { background: #0f172a; color: white; border-color: #0f172a; }
+textarea { width: 100%; height: 260px; padding: 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; line-height: 1.6; }
+.result { background: white; border-radius: 16px; padding: 24px; margin-top: 24px; border: 1px solid #e2e8f0; }
+.score-box { display: flex; gap: 20px; align-items: center; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9; }
+.score-num { font-size: 56px; font-weight: 800; line-height: 1; } .score-num span { font-size: 20px; color: #94a3b8; }
+.issue { background: #fffbeb; border: 1px solid #fde68a; padding: 12px; border-radius: 10px; margin-top: 10px; font-size: 14px; line-height: 1.5; }
