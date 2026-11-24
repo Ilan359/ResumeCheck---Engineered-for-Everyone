@@ -6,7 +6,7 @@ const PURPOSES = ["Software", "Marketing", "Finance", "Design", "General"];
 export default function Home() {
   const [fileName, setFileName] = useState("");
   const [text, setText] = useState("");
-  const [purpose, setPurpose] = useState("Software / הייטק");
+  const [purpose, setPurpose] = useState("Software");
   const [showPopup, setShowPopup] = useState(false);
   const [email, setEmail] = useState("");
   const [isLogged, setIsLogged] = useState(false);
