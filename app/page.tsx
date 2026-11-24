@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-const PURPOSES = ["Software / הייטק", "Marketing / שיווק", "Finance / כספים", "Design / עיצוב", "General / כללי"];
+const PURPOSES = ["Software", "Marketing", "Finance", "Design", "General"];
 
 export default function Home() {
   const [fileName, setFileName] = useState("");
