@@ -18,7 +18,7 @@ export default function Home() {
     setFileName(f.name);
     const t = await f.text().catch(() => "");
     if (t && t.length > 50) setText(t);
-    else setText(`Resume file: ${f.name}\n\nPlease paste your resume text below if the file is PDF.\n\n`);
+    else setText(`Resume file: ${f.name}\n\nPlease paste your resume text below if the file is PDF, or continue with manual check.\n\n`);
   };
 
   const onAnalyzeClick = () => {
@@ -55,80 +55,54 @@ export default function Home() {
     else score += 20;
     if (issues.length === 0) issues.push("Excellent! Your resume looks professional.");
     setResult({ score, issues, words });
-    window.scrollTo({ top: 650, behavior: "smooth" });
+    window.scrollTo({ top: 600, behavior: "smooth" });
   };
 
   return (
     <div className="page">
       <header>
-        <div className="logo"><span className="dot">●</span> resume<span className="orange">check.</span></div>
-        <div className="nav"><span>How it works</span><span>Examples</span><span>FAQ</span>{isLogged ? <span className="pill">{email}</span> : <button className="top-btn" onClick={() => setShowPopup(true)}>Get Started</button>}</div>
+        <div className="logo"><span className="logo-icon">✓</span> ResumeCheck</div>
+        <div className="header-links"><span>Tools</span><span>Blog</span><span>Pricing</span>{isLogged ? <span className="user-badge">{email}</span> : <button className="login-btn" onClick={() => setShowPopup(true)}>Log in</button>}</div>
       </header>
-
       <main>
-        <div className="badge">✦ FREE AI RESUME CHECKER • NO SIGN-UP TO TRY</div>
-        <h1>Is your resume<br/>actually <span className="highlight">good enough?</span></h1>
-        <p className="sub">Drop your CV. Get a real score in 10 seconds.<br/>See exactly what recruiters would fix.</p>
-
-        <div className="card">
-          <div className="card-top">
-            <span className="card-label">1. Choose your target job</span>
-            <select value={purpose} onChange={e => setPurpose(e.target.value)}>
-              {PURPOSES.map(p => <option key={p}>{p}</option>)}
-            </select>
-          </div>
-
-          <div className={`drop ${drag ? "drag" : ""}`}
-            onDragOver={e => { e.preventDefault(); setDrag(true); }}
-            onDragLeave={() => setDrag(false)}
-            onDrop={e => { e.preventDefault(); setDrag(false); handleFile(e.dataTransfer.files[0]); }}
-          >
-            <input type="file" id="file" accept=".pdf,.docx,.txt" onChange={e => handleFile(e.target.files?.[0])} hidden />
-            <div className="drop-circle">{fileName ? "✓" : "↑"}</div>
-            <h3>{fileName ? fileName : "Drag & drop your resume"}</h3>
-            <p>{fileName ? "Ready to check!" : "PDF, DOCX or TXT — we never store your file"}</p>
-            <label htmlFor="file" className="browse">{fileName ? "Change file" : "Browse files"}</label>
-          </div>
-
-          <div className="or"><span></span> or paste text <span></span></div>
-          <textarea value={text} onChange={e => setText(e.target.value)} placeholder="Paste your resume here..." />
-          <button className="cta" onClick={onAnalyzeClick}>Check my resume →</button>
-          <p className="micro">🔒 Private • Free • Takes 10 seconds</p>
+        <h1>Check Your Resume <span>for Free</span></h1>
+        <p className="subtitle">Upload your CV, choose your target job, and get a professional score + exactly what to fix.</p>
+        <div className="purpose-row"><span>Resume for:</span><select value={purpose} onChange={e => setPurpose(e.target.value)}>{PURPOSES.map(p => <option key={p}>{p}</option>)}</select></div>
+        <div className={`upload-box ${drag ? "drag" : ""}`} onDragOver={e => { e.preventDefault(); setDrag(true); }} onDragLeave={() => setDrag(false)} onDrop={e => { e.preventDefault(); setDrag(false); handleFile(e.dataTransfer.files[0]); }}>
+          <input type="file" id="file" accept=".pdf,.docx,.txt" onChange={e => handleFile(e.target.files?.[0])} hidden />
+          <div className="upload-icon">⬆</div>
+          <h2>{fileName ? `✓ ${fileName}` : "Drop your resume here"}</h2>
+          <p>{fileName ? "File uploaded! Now click Check below." : "or"}</p>
+          {!fileName && <label htmlFor="file" className="choose-btn">Choose File</label>}
+          {fileName && <label htmlFor="file" className="choose-btn outline">Change File</label>}
+          <span className="formats">PDF, DOCX, TXT • 100% Free • Private</span>
         </div>
-
+        <div className="paste-wrap"><label>Or paste your resume text here (for best accuracy):</label><textarea value={text} onChange={e => setText(e.target.value)} placeholder="Paste your resume here..." /></div>
+        <button className="big-check" onClick={onAnalyzeClick}>Check My Resume →</button>
+        <p className="under-btn">🔒 Free • No credit card • Your file is not stored</p>
         {result && (
-          <div className="result">
-            <div className="result-head">
-              <div><div className="score-num">{result.score}<span>/100</span></div><p>{result.words} words • {purpose}</p></div>
-              <div className="verdict">{result.score >= 80 ? "🎉 Ready to send!" : result.score >= 50 ? "👍 Good, needs fixes" : "🛠️ Needs work"}</div>
-            </div>
-            <div className="bar"><div className="fill" style={{ width: `${result.score}%` }} /></div>
-            <h4>What to fix first:</h4>
-            {result.issues.map((i: string, idx: number) => <div key={idx} className="fix">→ {i}</div>)}
-            <button className="cta ghost" onClick={() => { setResult(null); setText(""); setFileName(""); }}>Check another resume</button>
+          <div className="result-card">
+            <div className="score-left"><div className="big-score" style={{ color: result.score >= 80 ? "#16a34a" : result.score >= 50 ? "#f59e0b" : "#ef4444" }}>{result.score}<span>/100</span></div><div><b>{result.score >= 80 ? "Excellent - Ready to send!" : result.score >= 50 ? "Good, but needs fixes" : "Needs major improvements"}</b><p>{result.words} words • Target: {purpose}</p></div></div>
+            <div className="bar"><div className="fill" style={{ width: `${result.score}%`, background: result.score >= 80 ? "#16a34a" : result.score >= 50 ? "#f59e0b" : "#ef4444" }} /></div>
+            <h3>What to fix:</h3>
+            {result.issues.map((i: string, idx: number) => <div key={idx} className="issue">⚠️ {i}</div>)}
+            <button className="big-check" onClick={() => { setResult(null); setText(""); setFileName(""); }}>Check Another Resume</button>
           </div>
         )}
-
-        <div className="three">
-          <div><div className="emoji">⚡</div><b>10 seconds</b><p>No waiting, instant score</p></div>
-          <div><div className="emoji">🎯</div><b>Made for your job</b><p>Not generic advice</p></div>
-          <div><div className="emoji">💬</div><b>Clear fixes</b><p>Know exactly what to change</p></div>
-        </div>
-
-        <div className="quote">“I fixed 3 things and got 2 interviews in the same week.” <span>- Noa, Tel Aviv</span></div>
+        <div className="features"><div><b>⚡ 10 Seconds</b><p>Get instant feedback</p></div><div><b>🎯 Targeted</b><p>Optimized for your job</p></div><div><b>🔒 Private</b><p>We never store your CV</p></div></div>
       </main>
-
       {showPopup && (
         <div className="overlay" onClick={() => setShowPopup(false)}>
           <div className="popup" onClick={e => e.stopPropagation()}>
-            <button className="x" onClick={() => setShowPopup(false)}>✕</button>
-            <div className="popup-emoji">🔓</div>
-            <h2>Your score is ready!</h2>
-            <p>Enter your email to unlock your full result. It takes 5 seconds.</p>
+            <button className="close" onClick={() => setShowPopup(false)}>✕</button>
+            <div className="popup-icon">✦</div>
+            <h2>Sign up to see your result</h2>
+            <p>Create a free account to unlock your full resume score and personalized fixes.</p>
             <label>Your email</label>
             <input type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} />
-            <button className="cta" onClick={register}>Unlock my result →</button>
-            <span className="micro">Free forever • No spam</span>
+            <button className="popup-btn" onClick={register}>Continue - It's Free →</button>
+            <span className="popup-small">By continuing you agree to our Terms. No spam, ever.</span>
+            <div className="popup-benefits">✓ Full score breakdown<br />✓ Save your history<br />✓ Unlimited checks</div>
           </div>
         </div>
       )}
